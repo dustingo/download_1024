@@ -10,7 +10,7 @@ class SmilespiderSpider(scrapy.Spider):
     root_url = ROOT_URL
     name = 'SmileSpider'
     allowed_domains = ['t66y.com']
-    start_urls = ['http://t66y.com/thread0806.php?fid=16&search=&page=2']
+    start_urls = ['http://t66y.com/thread0806.php?fid=16&search=&page=1']
     local_file_dir='D:/my1024pic/'
     def parse(self, response):
         content = response.body
