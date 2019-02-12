@@ -10,7 +10,7 @@ class SmilespiderSpider(scrapy.Spider):
     root_url = ROOT_URL
     name = 'SmileSpider'
     allowed_domains = ['t66y.com']
-    start_urls = ['http://t66y.com/thread0806.php?fid=16&search=&page=1']
+    start_urls = ['http://t66y.com/thread0806.php?fid=16&search=&page=2']
     local_file_dir='D:/my1024pic/'
     def parse(self, response):
         content = response.body
@@ -28,6 +28,8 @@ class SmilespiderSpider(scrapy.Spider):
                 article_url.append(urls)
         for url in article_url:
             yield Request(url=url,callback=self.parse_img,meta={})
+        if next_urls:
+            yield Request(url=next_urls,callback=self.parse)
 
 
     def parse_img(self, response):
