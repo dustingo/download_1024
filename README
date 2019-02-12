@@ -1,0 +1,15 @@
+1024 達蓋爾的旗幟
+纯粹自娱自乐
+作用：達蓋爾的旗幟专区帖子(图片爬取)
+声明：受公众号皮克啪的铲屎官推送的文章影响，如有雷同纯属借鉴...O(∩_∩)O
+不足：还不支持增量爬取，后续会增加增量爬取、入库等
+环境：
+Microsoft Windows 10
+Python 3.6.5
+
+使用步骤：
+1.安装python3.6
+2.pip install -r requirement.txt
+3.cmd或者在Pycharm终端下执行：scrapy crawl SmileSpider
+
+注意：需要梯子
