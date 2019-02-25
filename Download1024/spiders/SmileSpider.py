@@ -5,13 +5,14 @@ from Download1024.settings import  ROOT_URL
 import re
 from scrapy import Request
 import  os
-
+import redis
 class SmilespiderSpider(scrapy.Spider):
     root_url = ROOT_URL
     name = 'SmileSpider'
     allowed_domains = ['t66y.com']
     start_urls = ['http://t66y.com/thread0806.php?fid=16&search=&page=1']
     local_file_dir='D:/my1024pic/'
+    redis_db = redis.Redis(host='127.0.0.1',db=1,password='justtest',port=6379)
     def parse(self, response):
         content = response.body
         soup_handler = BeautifulSoup(content,"html.parser")
@@ -27,7 +28,11 @@ class SmilespiderSpider(scrapy.Spider):
                 urls = self.root_url + item['href']
                 article_url.append(urls)
         for url in article_url:
-            yield Request(url=url,callback=self.parse_img,meta={})
+            if self.redis_db.get(url):
+                pass
+            else:
+                self.redis_db.set(url, 1)
+                yield Request(url=url,callback=self.parse_img,meta={})
         if next_urls:
             yield Request(url=next_urls,callback=self.parse)
 
@@ -38,7 +43,7 @@ class SmilespiderSpider(scrapy.Spider):
         soup_handler = BeautifulSoup(content,"html.parser")
         temp_title_list = soup_handler.find_all('h4')
         temp_img_url_list = soup_handler.find_all('input',attrs={"data-src":True})
-        title_name = re.sub('\?|:','',temp_title_list[0].text)
+        title_name = re.sub('\?|:|\\|\/','',temp_title_list[0].text)
         #print(title_name)
         for img in temp_img_url_list:
             if img['data-src']:
@@ -51,7 +56,7 @@ class SmilespiderSpider(scrapy.Spider):
         content = response.body
         title_name = response.meta['title_name']
         index = response.meta['index']
-        img_format = response.url.split('.')[-1]
+        img_format = response.url.split('.')[-1].replace('?','')
         file_dir =self.local_file_dir + title_name + '/'
         file_name = file_dir + str(index) + '.'+ img_format
         if not os.path.exists(file_dir):

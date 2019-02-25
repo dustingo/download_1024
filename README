@@ -1,3 +1,4 @@
+version:1.0.0.1
 1024 達蓋爾的旗幟
 纯粹自娱自乐
 作用：達蓋爾的旗幟专区帖子(图片爬取)
@@ -10,6 +11,17 @@ Python 3.6.5
 使用步骤：
 1.安装python3.6
 2.pip install -r requirement.txt
-3.cmd或者在Pycharm终端下执行：scrapy crawl SmileSpider
+3.安装redis windows：
+    url：https://github.com/MicrosoftArchive/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.msi
+    修改redis目录下的redis.windows-service.conf配置文件：
+    requirepass justtest redis认证密码
+    redis绑定IP等
+
+4.cmd或者在Pycharm终端下执行：scrapy crawl SmileSpider
+5.可以在终端下执行：scrapy crawl SmileSpider -s JOBDIR=jobs/001来终端执行后重新按照之前的进度来爬取
 
 注意：需要梯子
+
+version:1.0.0.2
+使用redis来保存爬取过的url，如果在redis种查询到相关url的值，则略过
+否则将url作为key键保存，表示已爬取
